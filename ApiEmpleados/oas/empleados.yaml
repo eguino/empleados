@@ -1,0 +1,416 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: API EMPLEADOS
+  description: |
+    Api que se encarga de la administración de la información de los empleados.
+    
+host: 127.0.0.1:8000
+
+basePath: /gestion/v1
+
+schemes:
+   - https
+   - http
+produces:
+   - application/json
+  
+paths:
+  /empleados:
+    get:
+      summary: Consulta de todos los empleados
+      description: | 
+        Consulta la informacion tabular de los diversos empleados.
+      tags:
+      - Empleados
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Operación exitosa
+          schema:
+            $ref: "#/definitions/response-listar-empleados"
+        401:
+          description: Falla en autentificación
+          schema:
+            $ref: '#/definitions/error401'
+        404:
+          description: No hay datos para la combinación de parámetros indicada
+          schema:
+            $ref: "#/definitions/error404"
+        500:
+          description: Operación Inesperada
+          schema:
+            $ref: '#/definitions/error500'
+    post:
+      summary: Crear un nuevo empleado
+      description: |
+             Registrar nuevo empleado, proporcionando los datos del mismo.
+      tags: 
+        - Empleados
+      consumes:
+        - application/json
+      produces:
+      - application/json
+      
+      parameters:
+      -  name: body
+         description: "informacion de la peticion"
+         required: true
+         in: body
+         schema:
+          $ref: '#/definitions/Solicitud-nuevo-empleado'
+      responses:
+        201:
+          description: Operación exitosa
+          schema:
+            $ref: "#/definitions/response201"
+        401:
+          description: Falla en autentificación
+          schema:
+            $ref: '#/definitions/error401'
+        500:
+          description: Operación Inesperada
+          schema:
+            $ref: '#/definitions/error500'
+  /empleados/{idEmpleado}:
+    get:
+      summary: Consulta de empleado por id
+      description: | 
+        Consulta la informacion tabular de un empleado especifico por medio del id.
+      tags:
+      - Empleados
+      produces:
+      - application/json
+      
+      parameters:
+      - name: idEmpleado
+        description: "Clave del empleado"
+        required: true
+        in: path
+        type: integer
+        default: 1
+      responses:
+        200:
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/response-obtener-empleado'
+        400:
+          description: Entrada incorrecta
+          schema:
+            $ref: "#/definitions/error400"
+        401:
+          description: Falla en autentificación
+          schema:
+            $ref: '#/definitions/error401'
+        404:
+          description: No hay datos para la combinación de parámetros indicada
+          schema:
+            $ref: "#/definitions/error404"
+        500:
+          description: Operación Inesperada
+          schema:
+            $ref: '#/definitions/error500'
+    put:
+      summary: Actualizar un empleado existente
+      description: Permite actualizar la informacion de un empleado existente
+      tags:
+      - Empleados
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: idEmpleado
+          description: "Clave del empleado"
+          required: true
+          in: path
+          type: integer
+          default: 1
+        -  name: body
+           description: "informacion de la peticion actualizar"
+           required: true
+           in: body
+           schema:
+            $ref: '#/definitions/Solicitud-nuevo-empleado'
+      responses:
+        200:
+          description: Operación exitosa
+          schema:
+            $ref: "#/definitions/response200"
+        400:
+          description: Entrada incorrecta
+          schema:
+            $ref: "#/definitions/error400"
+        401:
+          description: Falla en autentificación
+          schema:
+            $ref: '#/definitions/error401'
+        500:
+          description: Operación Inesperada
+          schema:
+            $ref: '#/definitions/error500'
+              
+    delete:
+      summary: Eliminar empleado
+      description: Eliminacion de un empleado existente.
+      tags:
+        - Empleados
+      parameters:
+        - name: idEmpleado
+          description: "Clave del empleado"
+          required: true
+          in: path
+          type: integer
+          default: 1
+      responses:
+        200:
+          description: Operación exitosa
+          schema:
+            $ref: "#/definitions/response200"
+        400:
+          description: Entrada incorrecta
+          schema:
+            $ref: "#/definitions/error400"
+        401:
+          description: Falla en autentificación
+          schema:
+            $ref: '#/definitions/error401'
+        500:
+          description: Operación Inesperada
+          schema:
+            $ref: '#/definitions/error500'
+
+ 
+definitions:  
+  response-listar-empleados:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Mensaje exitoso
+        example: "Operación exitosa"
+      folio:
+        type: string
+        description: Numero de folio de la operación
+        example: "acb56fa5-2189-44d8-84cd-2eeb77716b24"
+      resultado: 
+        type: object
+        description: Respuesta de la solicitud
+        properties:
+         registros:
+          type: array
+          items:
+            type: object
+            properties:
+              idEmpleado:
+                type: integer
+                description: Parametro que indica el identificador del empleado que sera unico.
+                example: 1
+              nombreEmpleado:
+                type: string
+                description: Parametro que indica la nombre del empleado.
+                example: "Marco Antonio"
+              apellidoPaterno:
+                type: string
+                description: Parametro que indica la apellido paterno del empleado.
+                example: "Robles"
+              apellidoMaterno:
+                type: string
+                description: Parametro que indica la apellido materno del empleado.
+                example: "Ruiz"
+              numeroEmpleado:
+                type: integer
+                description: Parametro que indica la numero del empleado.
+                example: 12367098
+              fechaAlta:
+                type: string
+                description: Parametro que indica la fecha en que se dio de alta el empleado.
+                example: "22112024"
+              nss:
+                type: string
+                description: Parametro que indica el nss del empleado.
+                example: "129U3003"
+              rfc:
+                type: string
+                description: Parametro que indica el rfc del empleado.
+                example: "IOUU111299K65"
+              curp:
+                type: string
+                description: Parametro que indica la curp Del empleado.
+                example: "IOUU111299HSL0021"
+  response-obtener-empleado:
+    type: object
+    properties:
+      mensaje:
+        type: string
+        description: Mensaje exitoso
+        example: "Operación exitosa"
+      folio:
+        type: string
+        description: Numero de folio de la operación
+        example: "acb56fa5-2189-44d8-84cd-2eeb77716b24"
+      resultado: 
+        type: object
+        description: Respuesta de la solicitud modulo SIE
+        properties:
+          idEmpleado:
+            type: integer
+            description: Parametro que indica el identificador del empleado que sera unico.
+            example: 1
+          nombreEmpleado:
+            type: string
+            description: Parametro que indica la nombre del empleado.
+            example: "Marco Antonio"
+          apellidoPaterno:
+            type: string
+            description: Parametro que indica la apellido paterno del empleado.
+            example: "Robles"
+          apellidoMaterno:
+            type: string
+            description: Parametro que indica la apellido materno del empleado.
+            example: "Ruiz"
+          numeroEmpleado:
+            type: integer
+            description: Parametro que indica la numero del empleado.
+            example: 12367098
+          fechaAlta:
+            type: string
+            description: Parametro que indica la fecha en que se dio de alta el empleado.
+            example: "22112024"
+          nss:
+            type: string
+            description: Parametro que indica el nss del empleado.
+            example: "129U3003"
+          rfc:
+            type: string
+            description: Parametro que indica el rfc del empleado.
+            example: "IOUU111299K65"
+          curp:
+            type: string
+            description: Parametro que indica la curp Del empleado.
+            example: "IOUU111299HSL0021"
+                  
+  Solicitud-nuevo-empleado:
+    type: object
+    required: 
+      - id 
+      - nombrePuesto
+      - idEstatus
+    properties:
+      nombreEmpleado:
+        type: string
+        description: Parametro que indica la nombre del empleado.
+        example: "Marco Antonio"
+      apellidoPaterno:
+        type: string
+        description: Parametro que indica la apellido  paterno del empleado.
+        example: "Robles"
+      apellidoMaterno:
+        type: string
+        description: Parametro que indica la apellido materno del empleado.
+        example: "Ruiz"
+      numeroEmpleado:
+        type: integer
+        description: Parametro que indica la numero del empleado.
+        example: 12367098
+      fechaAlta:
+        type: string
+        description: Parametro que indica la fecha en que se dio de alta el empleado.
+        example: "22112024"
+      nss:
+        type: string
+        description: Parametro que indica el nss del empleado.
+        example: "129U3003"
+      rfc:
+        type: string
+        description: Parametro que indica el rfc del empleado.
+        example: "IOUU111299K65"
+      curp:
+        type: string
+        description: Parametro que indica la curp Del empleado.
+        example: "IOUU111299HSL0021"
+          
+# -----------------------------------------------------------
+  response201:
+     type: object
+     properties:
+      mensaje:
+        type: string
+        description: "Mensaje de operación exitosa"
+        example: "Operación exitosa"
+  response200:
+     type: object
+     properties:
+      mensaje:
+        type: string
+        description: "Mensaje de operación exitosa"
+        example: "Operación exitosa"
+  error400:
+    type: object
+    properties:
+      codigo:
+        type: string
+        description: Código del error
+        example: "400.gestion.1.0.0"
+      mensaje:
+        type: string
+        description: Descripción del error
+        example: "Petición no válida, favor de validar su información"
+      detalles:
+        type: array
+        items:
+          type: string
+          description: Lista de errores
+          example: "El parametro id es requerido"
+  error401:
+    type: object
+    properties:
+      codigo:
+        type: string
+        description: Código del error
+        example: "401.gestion.1.0"
+      mensaje:
+        type: string
+        description: Descripción del error
+        example: "Acceso no autorizado al recurso"
+      detalles:
+        type: array
+        items:
+          type: string
+          description: Lista de errores
+          example: "Las llaves estan vencidas."
+  error404:
+    type: object
+    properties:
+      codigo:
+        type: string
+        description: Código del error
+        example: "404.gestion.1.0"
+      mensaje:
+        type: string
+        description: Descripción del error
+        example: "Información no encontrada"
+      detalles:
+        type: array
+        description: Muestra informacion detallada del error
+        items:
+          type: string
+          example: "No se encontró información con la combinación de parámetros solicitados"
+  error500:
+    type: object
+    properties:
+      codigo:
+        type: string
+        description: Código del error
+        example: "500.gestion.1.0"
+      mensaje:
+        type: string
+        description: Descripción del error
+        example:  "Error interno del servidor"
+      detalles:
+        type: array
+        description: Muestra informacion detallada del error
+        items:
+          type: string
+          example: "Hubo un error al procesar la solicitud con la información de la Base de Datos"
